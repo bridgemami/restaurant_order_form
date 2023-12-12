@@ -49,3 +49,16 @@ body {
     padding: 0;
 }
 
+
+.hidden {
+    display: none;
+}
+
+.order-container {
+    padding: 0 1em;
+}
+
+.order-item-container {
+    display: flex;
+    justify-content: space-between;
+}
