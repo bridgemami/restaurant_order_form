@@ -2,13 +2,14 @@ import menuArray from "./data.js";
 
 const foodItem = document.getElementById("menu-container");
 const orderEl = document.getElementById("order-container");
-const pizzaInput = document.getElementById(`pizza-quantity`)
 let cartArray = [];
 
 function renderMenu() {
   let html = ``;
   const menuRender = menuArray
     .map((food) => {
+      let foodLowerCase = food.name.toLowerCase();
+      let quantity = foodLowerCase + "Quantity";
       return (html = `
        <section class="foodContainer">
         <p class="icon">${food.emoji}</p>
@@ -21,9 +22,9 @@ function renderMenu() {
         <button class="decrease-quantity" data-name="${food.name}" data-id="${
         food.id
       }">-</button>
-        <input type="number" name="quantity" class="quantity" value=0 id="${food.name}-quantity" data-id="${
-          food.id
-        }"  />
+        <p class="quantity" id="${food.name}-quantity" data-id="${
+        food.id
+      }">0</p>
         <button class="increase-quantity" data-name="${food.name}" data-id="${
         food.id
       }">+</button>
@@ -35,58 +36,95 @@ function renderMenu() {
 
   foodItem.innerHTML = menuRender;
 }
-
+{
+  /* <input type="number" name="quantity" class="quantity" value=0 id="${food.name}-quantity" data-id="${
+          food.id
+        }"  /> */
+}
 renderMenu();
 
 function renderOrder(order) {
   const orderList = document.createElement("div");
   orderEl.classList.remove("hidden");
   let html = "";
-console.log(order)
- 
+
   order.map((cart) => {
     html += `<div class="order-item-container">
               <p>${cart.name}</p>
                 <p>$${cart.price}</p>
                 <p></p>
                 <p>${cart.price}</p>
-                </div>`
+                </div>`;
   });
   orderList.innerHTML = `${html}`;
   orderEl.appendChild(orderList);
 }
 
-function quantityUpdate (order) {
-
+function updateQuantity(item) {
+  let quantity = cartArray.find((cart) => cart.id === item);
+  document.getElementById(quantity.id).innerHTML = quantity.item;
 }
- 
+
+function increment(id) {
+  let selectedItem = id;
+  let quantity = cartArray.find((cart) => cart.id === selectedItem);
+  if (quantity === undefined) {
+    cartArray.push({
+      id: selectedItem,
+      item: 1,
+    });
+  } else {
+    quantity.item++;
+  }
+  updateQuantity(selectedItem);
+  console.log(cartArray);
+}
+
+function decrement(id) {
+  let selectedItem = id;
+  let quantity = cartArray.find((cart) => cart.id === selectedItem);
+  if (quantity.item === 0) {
+    return;
+  } else {
+    quantity.item--;
+  }
+  updateQuantity(selectedItem);
+  console.log(cartArray);
+}
+
 document.addEventListener("click", (e) => {
   const item = e.target.classList;
 
   e.preventDefault();
-  console.log(document.getElementById('Pizza-quantity').value)
   if (item[0] === "increase-quantity") {
-
-    menuArray.filter((item) =>{
-      item.quantity = Number(document.getElementById(`${item.name}-quantity`).value)
-      if(item.id.toString() === e.target.dataset.id)  {
-        item.quantity++
-        cartArray.push(item)} 
-        // updateQuantityInMenu(item);
+    menuArray.filter((item) => {
+      item.quantity = document.getElementById(`${item.name}-quantity`);
+      // console.log(item.quantity.id)
+      if (item.id.toString() === e.target.dataset.id) {
+        increment(item.quantity.id);
+        // cartArray.push(item)
       }
-    );
-
-      renderOrder(cartArray);
-  }
-  if(item[0] === "decrease-quantity"){
-    menuArray.filter((item) => item.id.toString() === e.target.dataset.id ? cartArray.pop(item) : null)
+    });
+    orderEl.innerHTML = "";
     renderOrder(cartArray);
+  }
+  if (item[0] === "decrease-quantity") {
+    menuArray.filter((item) => {
+      item.quantity = document.getElementById(`${item.name}-quantity`);
+      if (item.id.toString() === e.target.dataset.id) {
+        decrement(item.quantity.id);
+      }
+    });
+
+    orderEl.innerHTML = "";
     if (cartArray.length <= 0) {
-        orderEl.innerHTML = "";
-        // orderEl.classList.add("hidden")
+      orderEl.innerHTML = "";
+      // orderEl.classList.add("hidden")
     }
-    else {
-        console.log(cartArray)
+    if (cartArray.length > 0) {
+      // decrement(document.getElementById(`${item.name}-quantity`))
+      orderEl.innerHTML = "";
+      renderOrder(cartArray);
     }
   }
 });
