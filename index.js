@@ -2,6 +2,8 @@ import menuArray from "./data.js";
 
 const foodItem = document.getElementById("menu-container");
 const orderEl = document.getElementById("order-container");
+const checkOutEl = document.getElementById("check-out-container");
+
 // let cartArray = JSON.parse(localStorage.getItem("cart")) || [];
 let cartArray = [];
 function renderMenu() {
@@ -10,7 +12,8 @@ function renderMenu() {
     .map((food) => {
       let quantity =
         cartArray.find((cart) => cart.id === `${food.name}-quantity`) || [];
-      return (html = `
+      return (
+        html = `
        <section class="foodContainer">
         <p class="icon">${food.emoji}</p>
         <div class="foodInformationContainer">
@@ -45,6 +48,10 @@ function renderEmptyCart() {
   </div>`;
 }
 
+// let quantity =
+// cartArray.find((cart) => cart.id === `${food.name}-quantity`) || [];
+
+
 function renderOrder() {
   const total = [];
   if (cartArray.length !== 0) {
@@ -55,7 +62,9 @@ function renderOrder() {
         return `<div class="order-item-container">
       <p>${cart.emoji}</p>
         <p>$${cart.price}</p>
-        <p>${cart.item}</p>
+        <button class="decrease-quantity-cart" data-name="${cart.name}" data-id="${cart.id}">-</button>
+          <p class="quantity" id="${cart.name}-quantity" data-id="${cart.id}">${cart.item === undefined ? 0 : cart.item}</p>
+          <button class="increase-quantity-cart" data-name="${cart.name}" data-id="${cart.id}">+</button>
         <p>$${subtotal}</p>
         <p id="${cart.name}-delete" class="delete-item" data-id=${cart.itemId}>X</p>
         </div>`;
@@ -64,19 +73,143 @@ function renderOrder() {
     orderEl.innerHTML += `<div class="order-total-container">
     <p>Total: $${total.reduce((a, b) => {
       return a + b;
-    })}
-    <button>Submit Order</button>
+    }
+    )}
+    <button id ="checkout-btn" class="checkout-btn">Checkout</button>
+    <button id="clear-cart-btn" class="clear-cart-btn btn">Clear Order</button>
     </div>`;
-  } else {
+  } 
+  else {
     renderEmptyCart();
   }
+  renderMenu()
 }
 
 renderOrder();
 
+function renderCheckout(e) {
+  e.preventDefault();
+  checkOutEl.classList.remove("hidden");
+  let createDiv = document.createElement("div");
+  const date = new Date()
+  let getMonth = date.getMonth() + 1
+  let getYear = date.getFullYear();
+ function month  () {
+  if(getMonth <10) {
+  return getMonth.toString().padStart(2, '0')
+ }
+ else {
+  return getMonth
+ }}
+
+ function year () {
+  if(getYear <= getYear) {
+  return getYear
+ }
+ else {
+  return 
+ }}
+
+  createDiv.innerHTML = `
+  <h3>Enter card details</h3>
+  <p id="close-payment-btn" class="close-payment-btn">x</p>
+  <form>
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name" placeholder="Name" required />
+
+  <label for="credit-card-number">Credit Card Number</label>
+  <input type="text" id="credit-card-number" name="credit-card-number" placeholder="Credit Card Number" required />
+
+  <label for="credit-card-date">Expiration Date</label>
+  <input type="month" id="credit-card-date" name="credit-card-date" min="${year()}-${month()}" value="${year()}-${month()}" required />
+  <label for="credit-card-code">Code</label>
+  <input type="text" id="credit-card-code" name="credit-card-code" placeholder="CSC code" minLength="3" maxLength="4" required />
+  <p id="missing"></p>
+
+  <button type="submit" id="payment-btn" class="payment-btn btn">Submit</button>
+  </form>
+  `
+  return checkOutEl.appendChild(createDiv);
+}
+
+function paymentRequirements (e) {
+  const missingEl =document.getElementById("missing")
+  const nameEl = document.getElementById("name")
+  const creditCardNumEl = document.getElementById("credit-card-number")
+  const cvvEl = document.getElementById("credit-card-code")
+  if(nameEl.value.length > 2 && creditCardNumEl.value.length === 16 && cvvEl.value.length === 3) {
+    document.querySelector("body").innerHTML = `<h2>Thank you ${nameEl.value} for your order!</h2>
+                                                <p>It should ready in ${10 * cartArray.length} minutes.</p>
+                                                <p>The page will automatically go back to the ordering page in 10 seconds.</p>
+    `
+    setTimeout(() => location.reload(), 10000);
+  }
+  else if (nameEl.value.length < 2 ) {
+      if (creditCardNumEl.value.length < 16  || creditCardNumEl.value.length > 16) {
+        missingEl.innerHTML = ''
+        missingEl.innerHTML = `<p>Please enter your 16 digit credit card number and name with more than 2 letters</p>`
+      }
+
+      else if(cvvEl.value.length >3 || cvvEl.value.length < 3) {
+        missingEl.innerHTML = ''
+        missingEl.innerHTML = `<p>Please enter your 3 digit credit card cvv code and name with more than 2 letters</p>`
+      }
+    else{
+      missingEl.innerHTML = ''
+      missingEl.innerHTML = `<p>Please enter name with more than 2 letters</p>`
+    }
+  }
+    else if  (creditCardNumEl.value.length < 16  || creditCardNumEl.value.length > 16) {
+        if(cvvEl.value.length >3 || cvvEl.value.length < 3) {
+          missingEl.innerHTML = ''
+          missingEl.innerHTML = `<p>Please enter your 16 digit credit card number and 3 digit credit card cvv code</p>`
+
+        }
+        else {
+          missingEl.innerHTML = ''
+          missingEl.innerHTML = '<p>Please enter your 16 digit credit card number</p>'
+        }
+    }
+
+    else if(cvvEl.value.length >3 || cvvEl.value.length < 3){
+      missingEl.innerHTML = ''
+      missingEl.innerHTML = '<p>Please enter your 3 digit credit card cvv code</p>'
+    }
+  
+  else {
+    missingEl.innerHTML = ''
+    missingEl.innerHTML = `<p>Please enter all the information</p>`
+  }
+
+}
+
 function updateQuantity(item) {
   let quantity = cartArray.find((cart) => cart.id === item);
   document.getElementById(quantity.id).innerHTML = quantity.item;
+}
+
+function cartQuantityIncrement(id) {
+  let selectedItem = id;
+  let quantity = cartArray.find((cart) => cart.id === selectedItem);
+  return quantity.item++
+}
+
+function cartQuantityDecrement(id) {
+  let selectedItem = id;
+  let quantity = cartArray.find((cart) => cart.id === selectedItem);
+  if(quantity.item > 1){
+   quantity.item--
+   return cartArray
+}
+  else if(quantity.item === 1) {
+    console.log(quantity.item)
+    cartArray = cartArray.filter(cart => cart.id !== selectedItem)
+    return cartArray
+  }
+  else {
+    return
+  }
+
 }
 
 function increment(id, item) {
@@ -119,8 +252,16 @@ function decrement(id) {
 function deleteItemFromCart(id) {
   let selectedItem = id;
   // console.log(cartArray)
- cartArray = cartArray.filter((cart) => cart.id !== selectedItem);
-  renderOrder()
+  cartArray = cartArray.filter((cart) => cart.id !== selectedItem);
+  //  localStorage.setItem("cart", JSON.stringify(cartArray));
+  renderOrder();
+}
+
+function clearCart() {
+  cartArray = [];
+  renderMenu();
+  renderOrder();
+  checkOutEl.innerHTML = ``
 }
 
 document.addEventListener("click", (e) => {
@@ -132,6 +273,7 @@ document.addEventListener("click", (e) => {
       if (item.id.toString() === e.target.dataset.id) {
         increment(item.quantity.id, item);
         renderOrder();
+        console.log(cartArray);
       }
     });
   }
@@ -149,9 +291,42 @@ document.addEventListener("click", (e) => {
       item.delete = document.getElementById(`${item.name}-quantity`);
       if (item.id.toString() === e.target.dataset.id) {
         deleteItemFromCart(item.delete.id);
-        document.getElementById(item.delete.id).textContent = 0
-        console.log(cartArray)
+        document.getElementById(item.delete.id).textContent = 0;
+        console.log(cartArray);
       }
     });
+  }
+  if(item[0] === "increase-quantity-cart") {
+    cartArray.filter((item) => {
+      item.quantity = document.getElementById(`${item.name}-quantity`);
+      if (item.id.toString() === e.target.dataset.id) {
+        cartQuantityIncrement(item.quantity.id);
+        renderOrder();
+      }
+    });
+  }
+  if(item[0] === "decrease-quantity-cart") {
+    cartArray.filter((item) => {
+      item.quantity = document.getElementById(`${item.name}-quantity`);
+      if (item.id.toString() === e.target.dataset.id) {
+        cartQuantityDecrement(item.quantity.id);
+        console.log(cartArray)
+        renderOrder()
+      }
+    });
+  }
+  if (item[0] === "clear-cart-btn") {
+    clearCart();
+  }
+
+  if(item[0] === "checkout-btn") {
+    renderCheckout(e)
+  }
+
+  if(item[0] === "payment-btn") {
+    paymentRequirements(e)
+  }
+  if(item[0] === "close-payment-btn") {
+      checkOutEl.innerHTML = ``
   }
 });
