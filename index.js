@@ -4,14 +4,14 @@ const headerEl = document.getElementById("header");
 const foodItem = document.getElementById("menu-container");
 const orderEl = document.getElementById("order-container");
 const checkOutEl = document.getElementById("check-out-container");
+let cartArray = [];
 
 // let cartArray = JSON.parse(localStorage.getItem("cart")) || [];
-let cartArray = [];
 function renderMenu() {
   let html = ``;
-  const menuRender = menuArray
+  let menuRender = menuArray
     .map((food) => {
-      let quantity =
+      const quantity =
         cartArray.find((cart) => cart.id === `${food.name}-quantity`) || [];
       return (html = `
        <section class="foodContainer">
@@ -40,16 +40,13 @@ function renderMenu() {
   foodItem.innerHTML = menuRender;
 }
 
-renderMenu();
+// renderMenu();
 
 function renderEmptyCart() {
   orderEl.innerHTML = `<div class="empty-cart">
   <h2>Cart is empty</h2>
   </div>`;
 }
-
-// let quantity =
-// cartArray.find((cart) => cart.id === `${food.name}-quantity`) || [];
 
 function renderOrder() {
   const total = [];
@@ -103,10 +100,10 @@ function renderCheckout(e) {
   foodItem.classList.add("whiteout");
   headerEl.classList.add("whiteout");
   checkOutEl.classList.remove("whiteout");
-  let createDiv = document.createElement("div");
+  const createDiv = document.createElement("div");
   const date = new Date();
-  let getMonth = date.getMonth() + 1;
-  let getYear = date.getFullYear();
+  const getMonth = date.getMonth() + 1;
+  const getYear = date.getFullYear();
   function month() {
     if (getMonth < 10) {
       return getMonth.toString().padStart(2, "0");
@@ -127,7 +124,7 @@ function renderCheckout(e) {
   </label>
 
   <label for="credit-card-number">
-  <input type="text" id="credit-card-number" name="credit-card-number" placeholder="Credit Card Number" pattern="[0-9]{3}" required /></label>
+  <input type="text" id="credit-card-number" name="credit-card-number" placeholder="Credit Card Number" pattern="[0-9]{15,16}" required /></label>
 
   <label for="credit-card-date">
   <input type="month" id="credit-card-date" name="credit-card-date" min="${getYear}-${month()}" value="${getYear}-${month()}" required /></label>
@@ -153,13 +150,14 @@ function paymentRequirements(e) {
     creditCardNumEl.value.length === 16 &&
     cvvEl.value.length === 3
   ) {
-    document.querySelector("body").innerHTML = `<h2 class="thank-you">Thank you ${
+    document.querySelector("body").innerHTML = 
+    `<main class="thank-you-container">
+    <h2 class="thank-you-heading">Thank you ${
       nameEl.value
     } for your order!</h2>
-                                                <p>It should ready in ${
-                                                  10 * cartArray.length
-                                                } minutes.</p>
-                                                <p>The page will automatically go back to the ordering page in 10 seconds.</p>
+    <p>It should ready in ${ 10 * cartArray.length} minutes.</p>
+    <p>The page will automatically go back to the ordering page in 10 seconds.</p>
+    </main>
     `;
     setTimeout(() => location.reload(), 10000);
   } else if (nameEl.value.length < 2) {
@@ -285,7 +283,6 @@ document.addEventListener("click", (e) => {
       if (item.id.toString() === e.target.dataset.id) {
         increment(item.quantity.id, item);
         renderOrder();
-        console.log(cartArray);
       }
     });
   }
