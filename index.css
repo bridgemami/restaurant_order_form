@@ -1,24 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 * {
     box-sizing: border-box;
 }
 body {
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
+    font-family: 'MedievalSharp', sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: beige;
 }
 
 .header {
     position: relative;
-    font-size: .5rem;
-
 }
 
 .banner {
-    width: 100vw;
+    opacity: 30%;
+    width: 100%;
 }
 
-
 .intro {
-    color: snow;
+    color: darkgreen;
     position: absolute;
     left: 20;
     top: 20;
@@ -32,7 +35,6 @@ body {
     justify-content: space-between;
     padding: 0 .5em;
     border-bottom: 1px solid #D2D2D2;
-
 }
 
 .icon {
@@ -42,6 +44,21 @@ body {
 
 .foodInformationContainer {
     width: 60%;
+}
+.quantity-container {
+    display: flex;
+    align-items: center;
+}
+
+.btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    height: 50%;
+    }
+
+.btn:focus {
+    border: black solid 2px;
 }
 
 .quantity {
@@ -55,11 +72,119 @@ body {
 }
 
 .order-container {
-    padding: 0 1em;
+    padding: 0 1em 1em 1em;
 }
 
 .order-item-container {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     color: black;
 }
+
+.order-total-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: column;
+    padding: 0;
+}
+
+.total, .checkout-container {
+    align-self: flex-end;
+}
+
+.delete-item, .total, .close-checkout {
+    font-weight: bold;
+}
+
+.checkout-btn, .clear-cart-btn, .payment-btn {
+    border: black solid 1px;
+    background: none;
+    align-items: center;
+}
+
+.payment-btn {
+    display: block;
+    margin: auto;
+}
+
+.payment-container {
+    box-shadow: 10px 10px 10px 10px black;
+    color: black;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: honeydew;
+      padding: 0 1em;
+      
+}
+
+.form-header {
+display: flex;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  padding-top: 1em;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    width: 80%;
+}
+
+.missing {
+    margin: .5em;
+}
+.close-checkout {
+    position: absolute;
+    right: 0;
+    padding: 0;
+    font-size: 1.25rem;
+}
+
+.cc {
+    text-align: center;
+    margin-top: 0;
+}
+
+.whiteout {
+    width: 100dvw;
+    opacity: 10%;
+}
+
+.thank-you {
+    padding-top: 1em;
+}
+
+input {
+    background-color: snow;
+    border:black solid 1px;
+}
+
+
+@media (min-width: 768px), (orientation: landscape) { 
+    body {
+        width: 90%;
+    }
+}
+
+ 
+ @media (min-width: 992px), (orientation: landscape) { 
+    body {
+        width: 80%;
+    }
+    .payment-container {
+        width: 50%;
+    }
+  }
+
