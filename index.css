@@ -1,29 +1,41 @@
+/* Importing MedievalSharp font from Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+/* Applying a global box-sizing property for consistent box model */
 * {
     box-sizing: border-box;
 }
+
+/* Setting up the main styling for the body */
 body {
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
+    font-family: 'MedievalSharp', sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: beige;
 }
 
+/* Header styling */
 .header {
     position: relative;
-    font-size: .5rem;
-
 }
 
+/* Banner image styling with fixed opacity */
 .banner {
-    width: 100vw;
+    opacity: 0.3; 
+    width: 100%;
 }
 
-
+/* Intro section styling */
 .intro {
-    color: snow;
+    color: darkgreen;
     position: absolute;
-    left: 20;
-    top: 20;
+    left: 20px;
+    top: 20px;
 }
 
+/* Styling for the food container */
 .foodContainer {
     display: flex;
     flex-direction: row;
@@ -32,20 +44,189 @@ body {
     justify-content: space-between;
     padding: 0 .5em;
     border-bottom: 1px solid #D2D2D2;
-
 }
 
+/* Icon styling */
 .icon {
     width: 20%;
     font-size: 2rem;
 }
 
+/* Container for food information */
 .foodInformationContainer {
     width: 60%;
 }
 
+/* Styling for quantity container */
+.quantity-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Button styling */
+.btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    height: 50%;
+}
+
+/* Button focus styling */
+.btn:focus {
+    border: black solid 2px;
+}
+
+/* Quantity styling */
 .quantity {
     width: 20%;
     padding: 0;
 }
 
+/* Hidden class for hiding elements */
+.hidden {
+    display: none;
+}
+
+/* Styling for the order container */
+.order-container {
+    padding: 0 1em 1em 1em;
+}
+
+/* Styling for order item container */
+.order-item-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: black;
+}
+
+/* Styling for order total container */
+.order-total-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: column;
+    padding: 0;
+}
+
+/* Styling for total and checkout container */
+.total, .checkout-container {
+    align-self: flex-end;
+}
+
+/* Styling for delete item, total, and close checkout */
+.delete-item, .total, .close-checkout {
+    font-weight: bold;
+}
+
+/* Styling for checkout buttons */
+.checkout-btn, .clear-cart-btn, .payment-btn {
+    border: black solid 1px;
+    background: none;
+    align-items: center;
+}
+
+/* Styling for payment button */
+.payment-btn {
+    display: block;
+    margin: auto auto 1em auto;
+}
+
+/* Styling for payment container */
+.payment-container {
+    box-shadow: 10px 10px 10px 10px black;
+    color: black;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: honeydew;
+    padding: 0 1em;
+}
+
+/* Header styling for form */
+.form-header {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    padding-top: 1em;
+}
+
+/* Container styling for form */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    width: 80%;
+}
+
+/* Styling for missing class */
+.missing {
+    margin: .5em;
+}
+
+/* Styling for closing checkout */
+.close-checkout {
+    position: absolute;
+    right: 0;
+    padding: 0;
+    font-size: 1.25rem;
+}
+.close-checkout:focus {
+    border: solid 1px black;
+}
+
+/* Styling for credit card text */
+.cc {
+    text-align: center;
+    margin-top: 0;
+}
+
+/* Styling for whiteout background */
+.whiteout {
+    width: 100vw;
+    opacity: 0.1;
+}
+
+/* Styling for thank-you section */
+.thank-you-container {
+    padding: 1em;
+}
+
+.thank-you-heading {
+    padding-top: 1em;
+}
+
+/* Styling for input elements */
+input {
+    background-color: snow;
+    border: black solid 1px;
+}
+
+/* Media query for smaller screens or landscape orientation */
+@media (min-width: 768px), (orientation: landscape) {
+    body {
+        width: 90%;
+    }
+    .intro {
+        color: darkgreen;
+        font-size: 2.5rem;
+    }
+}
+
+/* Media query for larger screens or landscape orientation */
+@media (min-width: 992px), (orientation: landscape) {
+    body {
+        width: 80%;
+    }
+    .payment-container {
+        width: 50%;
+    }
+}
