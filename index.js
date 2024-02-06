@@ -57,6 +57,7 @@ function renderOrder() {
         total.push(subtotal);
         return `<div class="order-item-container">
       <p class="icon">${cart.emoji}</p>
+      <p>${cart.name}</p>
         <p>$${cart.price}</p>
         <div class="quantity-container">
         <button class="decrease-quantity-cart btn" data-name="${
